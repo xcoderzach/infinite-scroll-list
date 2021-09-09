@@ -119,11 +119,13 @@ export default function Main({ results: initialResults }) {
   </>)
 }
 
+// This could probably be debounced
 async function getPage (pageNumber) {
   let attempts = 0
   while(true) {
     const response = await fetch(`http://app-homevision-staging.herokuapp.com/api_project/houses?page=${pageNumber + 1}&per_page=${perPage}`)
     if(response.status !== 200) {
+      attempts++
       await new Promise(res => setTimeout(res, 2 ** attempts * 10))
       continue
     }
